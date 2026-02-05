@@ -9,6 +9,7 @@
 #include <codecvt>
 #include <locale>
 #include <sapi.h>  // Windows Speech API
+#include <sphelper.h>  // SAPI helper functions (SpGetCategoryFromId)
 #include <ShlObj.h>
 
 #pragma comment(lib, "sapi.lib")
@@ -472,7 +473,8 @@ std::vector<InputHistoryManager::Recommendation> InputHistoryManager::GetRecomme
         });
 
     // Take top results
-    for (int i = 0; i < std::min(limit, (int)sorted.size()); ++i) {
+    int maxResults = limit < static_cast<int>(sorted.size()) ? limit : static_cast<int>(sorted.size());
+    for (int i = 0; i < maxResults; ++i) {
         results.push_back({sorted[i].first, sorted[i].second.source});
     }
 
